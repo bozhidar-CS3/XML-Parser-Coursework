@@ -21,12 +21,18 @@
     <ClCompile Include="Tag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Attribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XMLRoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Attribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

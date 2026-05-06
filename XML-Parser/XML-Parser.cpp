@@ -3,10 +3,23 @@
 
 #include <iostream>
 #include "Tag.h"
+#include "Attribute.h"
 #include <string>
 
 int main()
 {
+    //std::cout << "Test1\n";
+    //Attribute test1;
+    //std::cout << test1.get_attribute_name() << " " << test1.get_attribute_value() << " \n";
+
+    //std::cout << "Test2\n";
+
+    //Attribute test2("Dog", "2");
+    //std::cout << test2.get_attribute_name() << " " << test2.get_attribute_value() << " \n";
+    //std::cout << "Test3\n";
+
+    //Attribute test3("Dog", "");
+    //std::cout << test3.get_attribute_name() << " " << test3.get_attribute_value() << " \n";
     return 0;
 }
     

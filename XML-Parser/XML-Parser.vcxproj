@@ -123,10 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="XML-Parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attribute.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="XMLRoot.h" />
   </ItemGroup>
