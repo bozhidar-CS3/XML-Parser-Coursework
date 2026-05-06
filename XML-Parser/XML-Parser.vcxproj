@@ -123,7 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Tag.cpp" />
     <ClCompile Include="XML-Parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tag.h" />
+    <ClInclude Include="XMLRoot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
