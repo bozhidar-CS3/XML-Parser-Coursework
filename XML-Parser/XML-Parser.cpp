@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Tag.h"
 #include "Attribute.h"
+#include "XMLTextNode.h"
 #include <string>
 
 int main()
@@ -20,6 +21,16 @@ int main()
 
     //Attribute test3("Dog", "");
     //std::cout << test3.get_attribute_name() << " " << test3.get_attribute_value() << " \n";
+    
+    //XMLTextNode
+    
+    XMLTextNode node1;
+    std::cout << node1.get_XMLTextNode();
+    node1.set_XMLTextNode("az");
+    std::cout << node1.get_XMLTextNode();
+    XMLTextNode node2("neshto");
+    std::cout << node2.get_XMLTextNode();
+
     return 0;
 }
     
