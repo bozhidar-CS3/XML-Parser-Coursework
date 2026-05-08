@@ -18,27 +18,33 @@
     <ClCompile Include="XML-Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tag.cpp">
+    <ClCompile Include="Components\Attribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Attribute.cpp">
+    <ClCompile Include="Components\Tag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XMLTextNode.cpp">
+    <ClCompile Include="Components\XMLTextContent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\XMLTextNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tag.h">
+    <ClInclude Include="Components\Attribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XMLRoot.h">
+    <ClInclude Include="Components\Tag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Attribute.h">
+    <ClInclude Include="Components\XMLRootNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XMLTextNode.h">
+    <ClInclude Include="Components\XMLTextContent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XMLTextNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -37,12 +37,12 @@ Attribute::Attribute(const std::string& possible_name, const std::string& possib
 	
 }
 
-std::string Attribute::get_attribute_name() const
+const std::string& Attribute::get_attribute_name() const
 {
 	return attribute_name;
 }
 
-std::string Attribute::get_attribute_value() const
+const std::string& Attribute::get_attribute_value() const
 {
 	return attribute_value;
 }

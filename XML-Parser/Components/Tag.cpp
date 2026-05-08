@@ -52,12 +52,12 @@ Tag& Tag::set_tags(const std::string& possible_tag)
 	return *this;
 }
 
-std::string Tag::get_opening_tag() const
+const std::string& Tag::get_opening_tag() const
 {
 	return opening_tag;
 }
 
-std::string Tag::get_closing_tag() const
+const std::string& Tag::get_closing_tag() const
 {
 	return closing_tag;
 }

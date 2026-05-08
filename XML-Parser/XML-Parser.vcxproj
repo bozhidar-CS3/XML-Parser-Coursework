@@ -123,16 +123,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Attribute.cpp" />
-    <ClCompile Include="Tag.cpp" />
+    <ClCompile Include="Components\Attribute.cpp" />
+    <ClCompile Include="Components\Tag.cpp" />
+    <ClCompile Include="Components\XMLTextContent.cpp" />
+    <ClCompile Include="Components\XMLTextNode.cpp" />
     <ClCompile Include="XML-Parser.cpp" />
-    <ClCompile Include="XMLTextNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Attribute.h" />
-    <ClInclude Include="Tag.h" />
-    <ClInclude Include="XMLRoot.h" />
-    <ClInclude Include="XMLTextNode.h" />
+    <ClInclude Include="Components\Attribute.h" />
+    <ClInclude Include="Components\Tag.h" />
+    <ClInclude Include="Components\XMLRootNode.h" />
+    <ClInclude Include="Components\XMLTextContent.h" />
+    <ClInclude Include="Components\XMLTextNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
