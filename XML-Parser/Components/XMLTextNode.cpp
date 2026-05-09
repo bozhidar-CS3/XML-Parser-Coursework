@@ -17,7 +17,7 @@ const XMLTextContent& XMLTextNode::get_text_node() const
 	return content;
 }
 
-const std::string& XMLTextNode::get_string() const 
+const std::string XMLTextNode::get_string() const 
 {
 	return content.get_content();
 }

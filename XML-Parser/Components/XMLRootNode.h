@@ -7,7 +7,7 @@ class XMLRootNode
 
 public:
 	virtual ~XMLRootNode() = default;
-	virtual const std::string& get_string() const = 0;
+	virtual const std::string get_string() const = 0;
 };
 
 // Как да опиша атрибутите какви да са те ? Как изобщо да започна ? Правилно ли почвам ?

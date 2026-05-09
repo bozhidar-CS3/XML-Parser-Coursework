@@ -30,6 +30,9 @@
     <ClCompile Include="Components\XMLTextNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\XMLElementNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Attribute.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\XMLTextNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XMLElementNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

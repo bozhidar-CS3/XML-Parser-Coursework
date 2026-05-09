@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Components\Attribute.cpp" />
     <ClCompile Include="Components\Tag.cpp" />
+    <ClCompile Include="Components\XMLElementNode.cpp" />
     <ClCompile Include="Components\XMLTextContent.cpp" />
     <ClCompile Include="Components\XMLTextNode.cpp" />
     <ClCompile Include="XML-Parser.cpp" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="Components\Attribute.h" />
     <ClInclude Include="Components\Tag.h" />
+    <ClInclude Include="Components\XMLElementNode.h" />
     <ClInclude Include="Components\XMLRootNode.h" />
     <ClInclude Include="Components\XMLTextContent.h" />
     <ClInclude Include="Components\XMLTextNode.h" />

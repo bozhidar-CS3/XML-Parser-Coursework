@@ -39,7 +39,7 @@ Tag& Tag::set_tags(const std::string& possible_tag)
 {
 	if (is_opening_tag_valid(possible_tag))
 	{
-		opening_tag = opening_tag;
+		opening_tag = possible_tag;
 		closing_tag = opening_tag;
 		closing_tag.insert(1, "/");
 		std::cout << "Tags set successfully \n";

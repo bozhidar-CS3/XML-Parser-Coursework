@@ -9,62 +9,84 @@
 #include "Components/XMLTextNode.h"
 #include <string>
 #include <vector>
+#include "Components/XMLElementNode.h"
 int main()
 {
-    //std::cout << "Test1\n";
-    //Attribute test1;
-    //std::cout << test1.get_attribute_name() << " " << test1.get_attribute_value() << " \n";
+	//std::cout << "Test1\n";
+	//Attribute test1;
+	//std::cout << test1.get_attribute_name() << " " << test1.get_attribute_value() << " \n";
 
-    //std::cout << "Test2\n";
+	//std::cout << "Test2\n";
 
-    //Attribute test2("Dog", "2");
-    //std::cout << test2.get_attribute_name() << " " << test2.get_attribute_value() << " \n";
-    //std::cout << "Test3\n";
+	//Attribute test2("Dog", "2");
+	//std::cout << test2.get_attribute_name() << " " << test2.get_attribute_value() << " \n";
+	//std::cout << "Test3\n";
 
-    //Attribute test3("Dog", "");
-    //std::cout << test3.get_attribute_name() << " " << test3.get_attribute_value() << " \n";
-    
-    //XMLTextNode
-    
+	//Attribute test3("Dog", "");
+	//std::cout << test3.get_attribute_name() << " " << test3.get_attribute_value() << " \n";
+
+	//XMLTextNode
+
   /*  XMLTextContent node1;
-    std::cout << node1.get_content();
-    node1.set_content("az");
-    std::cout << node1.get_content();
-    XMLTextContent node2("neshto");
-    std::cout << node2.get_content();*/
+	std::cout << node1.get_content();
+	node1.set_content("az");
+	std::cout << node1.get_content();
+	XMLTextContent node2("neshto");
+	std::cout << node2.get_content();*/
 
-    std::cout << "XMLTextNode test! \n";
-    std::vector<XMLRootNode> arr;
-    XMLTextNode content1("Pesho");
-   
-    std::cout << content1.get_text_node().get_content()<< " or " << content1.get_string()<<"\n";
-    XMLTextNode node2;
-    std::cout << node2.get_text_node().get_content() << " or " << node2.get_string() << "\n";
+	std::cout << "XMLTextNode test! \n";
+	std::vector<XMLRootNode> arr;
+	XMLTextNode content1("Pesho");
 
-    XMLTextNode node3("Initial");
+	std::cout << content1.get_text_node().get_content() << " or " << content1.get_string() << "\n";
+	XMLTextNode node2;
+	std::cout << node2.get_text_node().get_content() << " or " << node2.get_string() << "\n";
 
-    node3.set_text_node("Middle").set_text_node("Final Text");
+	XMLTextNode node3("Initial");
 
-    std::cout << "Expected: Final Text \nActual:   "
-        << node3.get_text_node().get_content() <<" or " << node3.get_string() << "\n\n";
+	node3.set_text_node("Middle").set_text_node("Final Text");
 
-    std::vector<XMLRootNode*> tree_nodes;
-    tree_nodes.push_back(new XMLTextNode("John Doe"));
-    tree_nodes.push_back(new XMLTextNode("New York"));
+	std::cout << "Expected: Final Text \nActual:   "
+		<< node3.get_text_node().get_content() << " or " << node3.get_string() << "\n\n";
 
-    for (size_t i = 0; i < tree_nodes.size(); i++)
-    {
-      std::cout <<   tree_nodes[i]->get_string();
-    }
+	std::vector<XMLRootNode*> tree_nodes;
+	tree_nodes.push_back(new XMLTextNode("John Doe"));
+	tree_nodes.push_back(new XMLTextNode("New York"));
 
-    for (size_t i = 0; i < tree_nodes.size(); i++)
-    {
-        delete tree_nodes[i];
-    }
-    tree_nodes.clear(); // чистим указателите във вектора.
-    return 0;
+	for (size_t i = 0; i < tree_nodes.size(); i++)
+	{
+		std::cout << tree_nodes[i]->get_string();
+	}
+
+	for (size_t i = 0; i < tree_nodes.size(); i++)
+	{
+		delete tree_nodes[i];
+	}
+	tree_nodes.clear(); // чистим указателите във вектора.
+
+	// XMLElementNOde
+
+	Tag person_tag;
+	person_tag.set_tags("<Person>");
+	Attribute person_id("Id", "e23");
+
+	XMLElementNode rootElement;
+	rootElement.set_element_tag(person_tag).set_unique_id(person_id);
+
+	Tag nameTag;
+	nameTag.set_tags("<name>");
+	Attribute emptyId("", "");
+
+	XMLElementNode* nameElement = new XMLElementNode();
+	nameElement->set_element_tag(nameTag).set_unique_id(emptyId);
+
+	XMLTextNode* nameText = new XMLTextNode("James Bond");
+
+	std::cout << rootElement.get_string() << "\n";
+
+	return 0;
 }
-    
+
 
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
