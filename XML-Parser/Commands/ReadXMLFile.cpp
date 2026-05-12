@@ -1,7 +1,8 @@
-#include "ReadXMLFile.h"
+﻿#include "ReadXMLFile.h"
+#include "../Components/XMLRootNode.h"
 #include <iostream>
 
-bool XMLCommands::check_for_attribute(const std::string& opening_tag)
+bool XMLCommands::check_for_attribute(const std::string& opening_tag) const 
 {
 	if (opening_tag.find('=') != std::string::npos)
 	{
@@ -74,7 +75,7 @@ std::string XMLCommands::remove_tags_from_string(const std::string& line)
 	return result;
 }
 
-bool XMLCommands::check_for_tags(const std::string& line)
+bool XMLCommands::check_for_tags(const std::string& line) const 
 {
 	if (line.find_first_of("<>") != std::string::npos)
 	{
@@ -83,7 +84,7 @@ bool XMLCommands::check_for_tags(const std::string& line)
 	return false;
 }
 
-bool XMLCommands::check_for_attributes(const std::string& line)
+bool XMLCommands::check_for_attributes(const std::string& line) const 
 {
 	if (check_for_tags(line))
 	{
@@ -95,13 +96,18 @@ bool XMLCommands::check_for_attributes(const std::string& line)
 	return false;
 }
 
-bool XMLCommands::check_for_text_content(const std::string& line)
+bool XMLCommands::check_for_text_node(const std::string& line) const 
 {
 	if (check_for_tags(line) == false && line.empty() != true)
 	{
 		return true;
 	}
 	return false;
+}
+
+std::string XMLCommands::seperate_text_content(const std::string& line) const
+{
+		return line.substr(line.find('>') + 1, line.rfind('<') - line.find('>'));
 }
 
 void XMLCommands::fill_tags(const std::string& line, Tag& destination)
@@ -118,3 +124,89 @@ void XMLCommands::fill_tags(const std::string& line, Tag& destination)
 
 	}
 }
+
+bool XMLCommands::check_for_end_tag(const Tag& tag, const std::string& line) const
+{
+	if (line.find(tag.get_closing_tag()) != std::string::npos)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool XMLCommands::check_for_text_content(const std::string& line) const
+{
+	if (line.find('>') + 1 == line.rfind('<'))
+	{
+		return false;
+	}
+	return true;
+}
+
+void XMLCommands::read_from_file(const std::string file_name)
+{
+	std::vector<XMLRootNode*> tree;
+	XMLRootNode* position;
+	std::ifstream file(file_name);
+	if (!file.is_open())
+	{
+		std::cout << "Can't open the file";
+		return;
+	}
+	std::string line;
+	while (std::getline(file, line))
+	{
+		if (check_for_text_node(line))
+		{
+			//Искм тук да сложа елемент от тип текст възел
+			position->
+		}
+		if (check_for_tags(line))
+		{
+			if (check_for_attribute(line))
+			{
+				position
+			}
+		}
+
+	}
+
+	file.close();
+}
+
+//bool XMLCommands::check_attribute_for_id(const Attribute& location) const
+//{
+//	if (location.get_attribute_name() == "id")
+//	{
+//		return true;
+//	}
+//	return false;
+//}
+//
+//bool XMLCommands::check_for_id_correctnest(const std::vector<Attribute>& location) const
+//{
+//	std::vector<std::string> values;
+//	for (const Attribute attribute:location)
+//	{
+//		if (!check_attribute_for_id(attribute))
+//		{
+//			return false;
+//		}
+//		if (values.size() == 0)
+//		{
+//			values.push_back(attribute.get_attribute_value());
+//		}
+//		else
+//		{
+//			for (std::string value : values)
+//			{
+//				if (value == attribute.get_attribute_value())
+//				{
+//					return false;
+//				}
+//			}
+//			values.push_back(attribute.get_attribute_value());
+//		}
+//	}
+//	return true;
+//}

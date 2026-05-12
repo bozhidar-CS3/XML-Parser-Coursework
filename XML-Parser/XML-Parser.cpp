@@ -85,6 +85,7 @@ int main()
 
 	std::cout << rootElement.get_string() << "\n";*/
 
+
 	//функции тестове - генерирани от AI
 
 	XMLCommands parser;

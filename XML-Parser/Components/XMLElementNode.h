@@ -35,4 +35,7 @@ public:
 
 	XMLElementNode(const Attribute& id, const Tag& tag,const std::vector<Attribute>& attributes, std::vector<XMLRootNode*> children);
 
+	//new
+
+	void add_child(XMLRootNode* child) override;
 };

@@ -8,6 +8,10 @@ class XMLRootNode
 public:
 	virtual ~XMLRootNode() = default;
 	virtual const std::string get_string() const = 0;
+	//ново
+
+	virtual void add_element_node(XMLRootNode* child) = 0;
+	//virtual add_attributes()
 };
 
 // Как да опиша атрибутите какви да са те ? Как изобщо да започна ? Правилно ли почвам ?
