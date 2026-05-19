@@ -1,18 +1,23 @@
 ﻿#pragma once
 #include <iostream>
 #include <string>
+
+#include "../Commands/ReadXMLFile.h"
 //#include "XMLTextContent.h"
-class XMLRootNode
+class XMLNode
 {
 
 public:
-	virtual ~XMLRootNode() = default;
+	virtual ~XMLNode() = default;
 	virtual const std::string get_string() const = 0;
 	//ново
+	virtual XMLNode* copy() = 0;
 
-	virtual void add_element_node(XMLRootNode* child) = 0;
+	//virtual void add_element_node(XMLNode* child) = 0;
 	//virtual add_attributes()
 };
+
+XMLNode* parse(const std::string& file_path);
 
 // Как да опиша атрибутите какви да са те ? Как изобщо да започна ? Правилно ли почвам ?
 //Нека засега да направим голямата четворка за всеки случай.

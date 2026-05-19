@@ -27,3 +27,8 @@ XMLTextNode& XMLTextNode::set_text_node(const std::string& text_content)
 	content = XMLTextContent(text_content);
 	return *this;
 }
+
+XMLNode* XMLTextNode::copy()
+{
+	return new XMLTextNode(this->content.get_content());
+}

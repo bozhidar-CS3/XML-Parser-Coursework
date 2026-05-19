@@ -1,5 +1,5 @@
 ﻿#include "ReadXMLFile.h"
-#include "../Components/XMLRootNode.h"
+#include "../Components/XMLNode.h"
 #include <iostream>
 
 bool XMLCommands::check_for_attribute(const std::string& opening_tag) const 
@@ -96,6 +96,12 @@ bool XMLCommands::check_for_attributes(const std::string& line) const
 	return false;
 }
 
+ std::string XMLCommands::get_next_line()
+{
+	//TODO fix this
+	return "new line";
+}
+
 bool XMLCommands::check_for_text_node(const std::string& line) const 
 {
 	if (check_for_tags(line) == false && line.empty() != true)
@@ -108,6 +114,16 @@ bool XMLCommands::check_for_text_node(const std::string& line) const
 std::string XMLCommands::seperate_text_content(const std::string& line) const
 {
 		return line.substr(line.find('>') + 1, line.rfind('<') - line.find('>'));
+}
+
+bool XMLCommands::check_for_lonely_end_tag(const std::string& line) const
+{
+	if (line.find("</") != std::string::npos)
+	{
+		return true;
+	}
+	return false;
+
 }
 
 void XMLCommands::fill_tags(const std::string& line, Tag& destination)
@@ -143,36 +159,36 @@ bool XMLCommands::check_for_text_content(const std::string& line) const
 	return true;
 }
 
-void XMLCommands::read_from_file(const std::string file_name)
-{
-	std::vector<XMLRootNode*> tree;
-	XMLRootNode* position;
-	std::ifstream file(file_name);
-	if (!file.is_open())
-	{
-		std::cout << "Can't open the file";
-		return;
-	}
-	std::string line;
-	while (std::getline(file, line))
-	{
-		if (check_for_text_node(line))
-		{
-			//Искм тук да сложа елемент от тип текст възел
-			position->
-		}
-		if (check_for_tags(line))
-		{
-			if (check_for_attribute(line))
-			{
-				position
-			}
-		}
-
-	}
-
-	file.close();
-}
+//void XMLCommands::read_from_file(const std::string file_name)
+//{
+//	std::vector<XMLNode*> tree;
+//	XMLNode* position;
+//	std::ifstream file(file_name);
+//	if (!file.is_open())
+//	{
+//		std::cout << "Can't open the file";
+//		return;
+//	}
+//	std::string line;
+//	while (std::getline(file, line))
+//	{
+//		if (check_for_text_node(line))
+//		{
+//			//Искм тук да сложа елемент от тип текст възел
+//			position->
+//		}
+//		if (check_for_tags(line))
+//		{
+//			if (check_for_attribute(line))
+//			{
+//				position
+//			}
+//		}
+//
+//	}
+//
+//	file.close();
+//}
 
 //bool XMLCommands::check_attribute_for_id(const Attribute& location) const
 //{

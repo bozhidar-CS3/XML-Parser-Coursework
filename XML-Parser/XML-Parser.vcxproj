@@ -136,7 +136,7 @@
     <ClInclude Include="Components\Attribute.h" />
     <ClInclude Include="Components\Tag.h" />
     <ClInclude Include="Components\XMLElementNode.h" />
-    <ClInclude Include="Components\XMLRootNode.h" />
+    <ClInclude Include="Components\XMLNode.h" />
     <ClInclude Include="Components\XMLTextContent.h" />
     <ClInclude Include="Components\XMLTextNode.h" />
   </ItemGroup>

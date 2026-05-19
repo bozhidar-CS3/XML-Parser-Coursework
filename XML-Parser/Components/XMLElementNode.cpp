@@ -1,5 +1,6 @@
 ﻿#include "XMLElementNode.h"
 #include <string>
+#include "../Commands/ReadXMLFile.h"
 
 XMLElementNode::XMLElementNode()
 {
@@ -15,9 +16,24 @@ XMLElementNode::~XMLElementNode()
 	element_children.clear();
 }
 
+XMLElementNode::XMLElementNode( std::string& line)
+{
+	XMLCommands commands;
+	commands.fill_attributes(line, element_attributes);
+	commands.fill_tags(line, element_tag);
+	
+}
+
+
+//TODO fix it
 const std::string XMLElementNode::get_string() const
 {
 	return "Id " + unique_id.get_attribute_name() + " " + unique_id.get_attribute_value() + " " + element_tag.get_opening_tag();
+}
+
+void XMLElementNode::add_child(XMLNode* child)
+{
+	element_children.push_back(child);
 }
 
 const Attribute& XMLElementNode::get_unique_id() const
@@ -43,9 +59,34 @@ XMLElementNode& XMLElementNode::set_element_tag(const Tag& tag)
 	return *this;
 }
 
+void XMLElementNode::set_attributes(const std::vector<Attribute>& other)
+{
+	for (Attribute i:other)
+	{
+		this->element_attributes.push_back(i);
+	}
+}
+
+XMLElementNode::XMLElementNode(const XMLElementNode& other)
+{
+	this->unique_id = other.unique_id;
+	this->element_attributes = other.element_attributes;
+	this->element_tag = other.element_tag;
+	for (XMLNode* i:other.element_children)
+	{
+		this->element_children.push_back(i->copy());
+	}
+}
+
+XMLNode* XMLElementNode::copy()
+{
+	return new XMLElementNode(*this);
+}
+
 const Attribute& XMLElementNode::get_attribute_at(unsigned position) const
 {
-	return element_attributes[position];
+	
+	return element_attributes.at(position);
 }
 
 XMLElementNode& XMLElementNode::set_attribute_at(unsigned position, const Attribute& attribute)
@@ -54,7 +95,7 @@ XMLElementNode& XMLElementNode::set_attribute_at(unsigned position, const Attrib
 	return *this;
 }
 
-XMLElementNode::XMLElementNode(const Attribute& id, const Tag& tag, const std::vector<Attribute>& attributes, std::vector<XMLRootNode*> children)
+XMLElementNode::XMLElementNode(const Attribute& id, const Tag& tag, const std::vector<Attribute>& attributes, std::vector<XMLNode*> children)
 {
 	//TODO - евнтуално някакви чекове
 

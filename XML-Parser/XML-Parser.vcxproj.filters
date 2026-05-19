@@ -44,7 +44,7 @@
     <ClInclude Include="Components\Tag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\XMLRootNode.h">
+    <ClInclude Include="Components\XMLNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\XMLTextContent.h">
