@@ -29,13 +29,13 @@ XMLNode* parse(std::string& line)
 		return new XMLTextNode(line);
 	}
 	Tag temp;
-
+	Tag tmp;
+	command.fill_tags(line, tmp);
 	if (!command.check_for_lonely_end_tag(line) && command.check_for_end_tag(, line))
 	{
 		return nullptr;
 	}
-	Tag tmp;
-	command.fill_tags(line, tmp);
+	
 	// да седи този, за който още не сме намерили.
 
 
@@ -57,7 +57,7 @@ XMLNode* parse(std::string& line)
 		}
 		while (true)
 		{
-			XMLNode* child = parse(line, location);
+			XMLNode* child = parse(line);
 			if (child == nullptr)
 			{
 				break;

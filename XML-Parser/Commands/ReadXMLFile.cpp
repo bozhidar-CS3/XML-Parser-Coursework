@@ -2,7 +2,62 @@
 #include "../Components/XMLNode.h"
 #include <iostream>
 
-bool XMLCommands::check_for_attribute(const std::string& opening_tag) const 
+bool XMLCommands::opening_tag_closed(const std::string& line)
+{
+	if (line.find('>') == std::string::npos)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool XMLCommands::closing_tag_closed(const std::string& line)
+{
+	if (line.find('>',line.find("</")))
+	{
+		return true;
+	}
+	return false;
+	
+}
+
+unsigned XMLCommands::closing_members(const std::string& line, unsigned goal)
+{
+	return 0;
+}
+
+bool XMLCommands::check_for_multiple_tags(const std::string& line)
+{
+	size_t first_close = line.find('>');
+
+	if (first_close == std::string::npos)
+	{
+		return false;
+	}
+
+	size_t second_open = line.find('<', first_close);
+
+	
+
+	if (second_open == std::string::npos)
+	{
+		return false;
+	}
+
+	if (second_open + 1 < line.length() && line[second_open + 1] != '/')
+	{
+		return true;
+	}
+
+	return false;
+}
+
+unsigned XMLCommands::get_number_of_tags(const std::string& line)
+{
+	return 0;
+}
+
+bool XMLCommands::check_for_attribute(const std::string& opening_tag) const
 {
 	if (opening_tag.find('=') != std::string::npos)
 	{
@@ -102,6 +157,12 @@ bool XMLCommands::check_for_attributes(const std::string& line) const
 	return "new line";
 }
 
+ //bool XMLCommands::check_for_multiple_tags(const std::string& line) const
+ //{
+	// std::string new_line = line.substr(line.find('>'))
+	// return false;
+ //}
+
 bool XMLCommands::check_for_text_node(const std::string& line) const 
 {
 	if (check_for_tags(line) == false && line.empty() != true)
@@ -137,7 +198,6 @@ void XMLCommands::fill_tags(const std::string& line, Tag& destination)
 			tag += '>';
 		}
 		destination.set_tags(tag);
-
 	}
 }
 

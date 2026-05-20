@@ -14,6 +14,14 @@ class XMLCommands
 	
 
 public:
+
+	bool opening_tag_closed(const std::string& line);
+	bool closing_tag_closed(const std::string& line);
+	unsigned closing_members(const std::string& line, unsigned goal);
+	bool check_for_multiple_tags(const std::string& line);
+	unsigned get_number_of_tags(const std::string& line);
+
+
 	bool check_for_attribute(const std::string& opening_tag) const;
 	std::string seperate_attributes_from_tag(const std::string& opening_tag);
 	void fill_attributes(std::string& attribute_text, std::vector<Attribute>& location);
@@ -21,6 +29,7 @@ public:
 	bool check_for_tags(const std::string& line) const;
 	bool check_for_attributes(const std::string& line) const;
 	 std::string get_next_line();
+	 //bool check_for_multiple_tags(const std::string& line) const;
 	bool check_for_text_node(const std::string& line) const;
 	void fill_tags(const std::string& line, Tag& destination);
 	bool check_for_end_tag(const Tag& tag, const std::string& line) const;
