@@ -5,6 +5,7 @@
 #include "XMLTextContent.h"
 #include <vector>
 
+
 class XMLElementNode : public XMLNode
 {
 	Attribute unique_id;

@@ -54,7 +54,53 @@ bool XMLCommands::check_for_multiple_tags(const std::string& line)
 
 unsigned XMLCommands::get_number_of_tags(const std::string& line)
 {
-	return 0;
+	unsigned cnt = 0;
+
+	if (check_for_multiple_tags(line))
+	{
+		size_t pos = 0;
+		pos = line.find("</", pos);
+		unsigned cnt = 0;
+		while (pos != std::string::npos)
+		{
+			cnt++;
+			pos = line.find("</", pos);
+			
+		}
+	}
+	return cnt;
+
+
+}
+
+std::string XMLCommands::get_next_token( std::ifstream& file)
+{
+	char cur_symbol = file.peek();
+
+	while (std::isspace(cur_symbol))  //маха табове, нови редове, интервали.
+	{
+		file.get();
+		cur_symbol = file.peek();
+	}
+
+	if (file.eof())   //Ако е приключил
+	{
+		return "";
+	}
+	if (cur_symbol == '<')
+	{
+		std::string cur_tag;
+		std::getline(file, cur_tag, '>');
+		return cur_tag + '>';
+	}
+	else
+	{
+		std::string text;
+		std::getline(file, text, '<');
+		file.putback('<');
+		return text;
+	}
+	
 }
 
 bool XMLCommands::check_for_attribute(const std::string& opening_tag) const
@@ -93,14 +139,38 @@ void XMLCommands::fill_attributes( std::string& attribute_text, std::vector<Attr
 	size_t attribute_name_end, attribute_value_start, attribute_value_end;
 	std::string attribute_name;
 	std::string attribute_value;
-	attribute_value_start = text_copy.find('=') + 2;
+	if (text_copy.find('=') == std::string::npos)
+	{
+		return;
+	}
+
 	attribute_name_end = text_copy.find('=');
+
+	size_t first_quote = text_copy.find('"', attribute_name_end);
+	if (first_quote == std::string::npos) return;
+
+	attribute_value_start = first_quote + 1;
+
 	attribute_value_end = text_copy.find('"', attribute_value_start);
+
+	
+	size_t space_before_name = text_copy.rfind(' ', attribute_name_end);
+	if (space_before_name == std::string::npos)
+	{
+		space_before_name = 0;
+	}
+	else
+	{
+		space_before_name += 1; 
+	}
+
+
 	if (attribute_value_end == std::string::npos)
 	{
 		attribute_value_end = text_copy.length();
 	}
-	attribute_name = text_copy.substr(0, attribute_name_end);
+
+	attribute_name = text_copy.substr(space_before_name, attribute_name_end - space_before_name);
 	/*for (size_t i = 0; i < attribute_name_end; i++)
 	{
 		attribute_name[i] = text_copy[i];
@@ -112,13 +182,15 @@ void XMLCommands::fill_attributes( std::string& attribute_text, std::vector<Attr
 		attribute_value[cnt++] = text_copy[i];
 	}*/
 	location.push_back(Attribute(attribute_name, attribute_value));
-	text_copy.clear();
-	text_copy = attribute_text.substr(attribute_value_end + 1, attribute_text.length() - attribute_value_end);
-	/*for (size_t i = 0; i < attribute_text.length() - attribute_value_end; i++)
+
+	// Ако втората кавичка е била последният символ в стринга, няма какво повече да четем
+	if (attribute_value_end + 1 >= text_copy.length())
 	{
-		text_copy[i] = attribute_text[attribute_value_end + i];
-	}*/
-	attribute_text = text_copy;
+		return;
+	}
+
+	attribute_text = text_copy.substr(attribute_value_end + 1);
+
 	fill_attributes(attribute_text, location);
 }
 

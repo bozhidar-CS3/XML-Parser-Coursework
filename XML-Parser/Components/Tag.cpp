@@ -1,4 +1,4 @@
-#include "Tag.h"
+﻿#include "Tag.h"
 #include <iostream>
 #include <string>
 
@@ -12,18 +12,30 @@ Tag::Tag()
 
 Tag::Tag(const std::string& potenial_tag)
 {
-	if (is_opening_tag_valid(potenial_tag))
+	//проверяваме дали подадения таг не е затварящ.
+	if (potenial_tag.length() > 1 && potenial_tag[1] == '/')
 	{
-		opening_tag = potenial_tag;
-		closing_tag= potenial_tag;
-		closing_tag.insert(1, "/");
-		std::cout << "Tags set successfully \n";
+		closing_tag = potenial_tag; 
 
+		opening_tag = "<" + potenial_tag.substr(2);
+		std::cout << "Tags set successfully by closing tag! \n";
 	}
 	else
 	{
-		std::cout << "Invalid tag!\n";
+		if (is_opening_tag_valid(potenial_tag))
+		{
+			opening_tag = potenial_tag;
+			closing_tag = potenial_tag;
+			closing_tag.insert(1, "/");
+			std::cout << "Tags set successfully by opening tag! \n";
+		}
+		else
+		{
+			std::cout << "Invalid tag!\n";
+		}
 	}
+
+	
 }
 
 bool Tag::is_opening_tag_valid(const std::string& potenial_tag) const
@@ -37,17 +49,27 @@ bool Tag::is_opening_tag_valid(const std::string& potenial_tag) const
 
 Tag& Tag::set_tags(const std::string& possible_tag)
 {
-	if (is_opening_tag_valid(possible_tag))
+	if (possible_tag.length() > 1 && possible_tag[1] == '/')
 	{
-		opening_tag = possible_tag;
-		closing_tag = opening_tag;
-		closing_tag.insert(1, "/");
-		std::cout << "Tags set successfully \n";
+		closing_tag = possible_tag;
+		opening_tag = "<" + possible_tag.substr(2);
+		// std::cout << "Tags set successfully by closing tag! \n";
 	}
 	else
 	{
-		std::cout << "Invalid tag! \n";
+		if (is_opening_tag_valid(possible_tag))
+		{
+			opening_tag = possible_tag;
+			closing_tag = opening_tag;
+			closing_tag.insert(1, "/");
+			std::cout << "Tags set successfully \n";
+		}
+		else
+		{
+			std::cout << "Invalid tag! \n";
+		}
 	}
+	
 
 	return *this;
 }
