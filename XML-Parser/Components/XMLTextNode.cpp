@@ -12,6 +12,16 @@ XMLTextNode::XMLTextNode(const std::string& text_content):content(text_content)
 	
 }
 
+const std::string XMLTextNode::get_type() const
+{
+	return "TextNode";
+}
+
+void XMLTextNode::generate_unique_ids(UniqueId& values)
+{
+	return;
+}
+
 const XMLTextContent& XMLTextNode::get_text_node() const
 {
 	return content;

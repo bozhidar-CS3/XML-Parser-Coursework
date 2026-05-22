@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <iostream>
 #include <string>
+#include "../Commands/Unique.h"
 //#include "XMLTextContent.h"
 class XMLNode
 {
@@ -8,6 +9,8 @@ class XMLNode
 public:
 	virtual ~XMLNode() = default;
 	virtual const std::string get_string() const = 0;
+	virtual const std::string get_type() const = 0;
+	virtual void generate_unique_ids(UniqueId& values) = 0;
 	//ново
 	virtual XMLNode* copy() = 0;
 

@@ -24,12 +24,21 @@ public:
 	XMLElementNode(std::string& line);
 	const std::string get_string() const override;
 
+	const std::string get_type() const override;
+
+	size_t get_children_count() const;
+
+	void generate_unique_ids(UniqueId& values) override;
+
 	void add_child(XMLNode* child);
 	const Attribute& get_unique_id() const ;
 	XMLElementNode& set_unique_id(const Attribute& );
 	const Tag& get_element_tag() const;
 	XMLElementNode& set_element_tag(const Tag&);
 	
+	size_t get_attributes_count() const;
+//	std::vector<XMLElementNode*> get_element_node_children();
+
 	void set_attributes(const std::vector<Attribute>& other);
 
 	XMLElementNode(const XMLElementNode& other);

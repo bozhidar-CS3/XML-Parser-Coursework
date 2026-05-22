@@ -31,6 +31,29 @@ const std::string XMLElementNode::get_string() const
 	return "Id " + unique_id.get_attribute_name() + " " + unique_id.get_attribute_value() + " " + element_tag.get_opening_tag();
 }
 
+const std::string XMLElementNode::get_type() const
+{
+	return "ElementNode";
+}
+
+size_t XMLElementNode::get_children_count() const
+{
+	return element_children.size();
+}
+
+void XMLElementNode::generate_unique_ids(UniqueId& values)
+{
+	values.create_unique_ids(element_attributes, unique_id);
+	if (element_children.empty())
+	{
+		return;
+	}
+	for (XMLNode* i : element_children)
+	{
+		i->generate_unique_ids(values);
+	}
+}
+
 void XMLElementNode::add_child(XMLNode* child)
 {
 	element_children.push_back(child);
@@ -58,6 +81,26 @@ XMLElementNode& XMLElementNode::set_element_tag(const Tag& tag)
 	element_tag = tag;
 	return *this;
 }
+
+
+size_t XMLElementNode::get_attributes_count() const
+{
+	return element_attributes.size();
+}
+
+//std::vector<XMLElementNode*> XMLElementNode::get_element_node_children()
+//{
+//	std::vector<XMLNode* > children_copy;
+//	for (size_t i = 0; i < element_children.size(); ++i )
+//	{
+//		if (element_children[i]->get_type() == "ElementNode")
+//		{
+//			XMLElementNode cur()
+//			children_copy.push_back(element_children[i]->copy());
+//		}
+//	}
+//	return children_copy;
+//}
 
 void XMLElementNode::set_attributes(const std::vector<Attribute>& other)
 {

@@ -54,7 +54,12 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 			command.fill_attributes(token, attributes);
 			curent_element->set_attributes(attributes);
 		}
+		//Добавяме още една проверка за граничен случай самозатварящ се таг
 
+		if (token.length() >= 2 && token[token.length() - 2] == '/')
+		{
+			return curent_element;
+		}
 		while (true)
 		{
 			XMLNode* child = parse(file, el_tag);
@@ -68,6 +73,7 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 	}
 	throw std::runtime_error("Unknown XML format: " + token);
 }
+
 int main()
 {
 	
