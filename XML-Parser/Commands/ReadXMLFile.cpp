@@ -13,12 +13,12 @@ bool XMLCommands::opening_tag_closed(const std::string& line)
 
 bool XMLCommands::closing_tag_closed(const std::string& line)
 {
-	if (line.find('>',line.find("</")))
+	if (line.find('>', line.find("</")))
 	{
 		return true;
 	}
 	return false;
-	
+
 }
 
 unsigned XMLCommands::closing_members(const std::string& line, unsigned goal)
@@ -37,7 +37,7 @@ bool XMLCommands::check_for_multiple_tags(const std::string& line)
 
 	size_t second_open = line.find('<', first_close);
 
-	
+
 
 	if (second_open == std::string::npos)
 	{
@@ -65,7 +65,7 @@ unsigned XMLCommands::get_number_of_tags(const std::string& line)
 		{
 			cnt++;
 			pos = line.find("</", pos);
-			
+
 		}
 	}
 	return cnt;
@@ -73,17 +73,31 @@ unsigned XMLCommands::get_number_of_tags(const std::string& line)
 
 }
 
-std::string XMLCommands::get_next_token( std::ifstream& file)
+std::string XMLCommands::trim(const std::string& raw_text)
 {
-	char cur_symbol = file.peek();
+	size_t actual_start_of_text = raw_text.find_first_not_of(" \n\r\t");
+	if (actual_start_of_text == std::string::npos)
+	{
+		return "";
+	}
+	else
+	{
+		size_t end_of_text = raw_text.find_last_not_of(" \n\r\t");
+		return raw_text.substr(actual_start_of_text, end_of_text - actual_start_of_text + 1);
+	}
+}
 
-	while (std::isspace(cur_symbol))  //маха табове, нови редове, интервали.
+std::string XMLCommands::get_next_token(std::ifstream& file)
+{
+	int cur_symbol = file.peek(); // prawim go инт за да може да хване -1 което eof връща.
+
+	while (cur_symbol != EOF && std::isspace(static_cast<unsigned char>(cur_symbol)))  //маха табове, нови редове, интервали. //static_cast<unsigned char>   - Слагаме го за да може да разчита кирилица/
 	{
 		file.get();
 		cur_symbol = file.peek();
 	}
 
-	if (file.eof())   //Ако е приключил
+	if (cur_symbol == EOF)   //Ако е приключил
 	{
 		return "";
 	}
@@ -100,7 +114,7 @@ std::string XMLCommands::get_next_token( std::ifstream& file)
 		file.putback('<');
 		return text;
 	}
-	
+
 }
 
 bool XMLCommands::check_for_attribute(const std::string& opening_tag) const
@@ -129,7 +143,7 @@ std::string XMLCommands::seperate_attributes_from_tag(const std::string& opening
 	return attribute_string;
 }
 
-void XMLCommands::fill_attributes( std::string& attribute_text, std::vector<Attribute>& location)
+void XMLCommands::fill_attributes(std::string& attribute_text, std::vector<Attribute>& location)
 {
 	if (attribute_text.length() == 0 || attribute_text.empty() == true)
 	{
@@ -137,6 +151,7 @@ void XMLCommands::fill_attributes( std::string& attribute_text, std::vector<Attr
 	}
 	std::string text_copy = attribute_text;
 	size_t attribute_name_end, attribute_value_start, attribute_value_end;
+
 	std::string attribute_name;
 	std::string attribute_value;
 	if (text_copy.find('=') == std::string::npos)
@@ -147,30 +162,56 @@ void XMLCommands::fill_attributes( std::string& attribute_text, std::vector<Attr
 	attribute_name_end = text_copy.find('=');
 
 	size_t first_quote = text_copy.find('"', attribute_name_end);
+
 	if (first_quote == std::string::npos) return;
 
 	attribute_value_start = first_quote + 1;
 
 	attribute_value_end = text_copy.find('"', attribute_value_start);
 
-	
-	size_t space_before_name = text_copy.rfind(' ', attribute_name_end);
-	if (space_before_name == std::string::npos)
-	{
-		space_before_name = 0;
-	}
-	else
-	{
-		space_before_name += 1; 
-	}
-
-
 	if (attribute_value_end == std::string::npos)
 	{
 		attribute_value_end = text_copy.length();
 	}
+	//това ще променяме заради test24.05{
 
-	attribute_name = text_copy.substr(space_before_name, attribute_name_end - space_before_name);
+	//size_t space_before_name = text_copy.rfind(' ', attribute_name_end);
+	//if (space_before_name == std::string::npos)
+	//{
+	//	space_before_name = 0;
+	//}
+	//else
+	//{
+	//	space_before_name += 1; 
+	//}
+	//attribute_name = text_copy.substr(space_before_name, attribute_name_end - space_before_name);
+
+	//}
+
+
+	//Евнтуално да може да има > вътре но това изисква КДТА.
+	//нова логика
+	std::string name_part = text_copy.substr(0, attribute_name_end);
+	size_t actual_end_of_name = name_part.find_last_not_of(" \n\r\t");
+	if (actual_end_of_name != std::string::npos)
+	{
+		size_t  actual_start_of_name = name_part.find_last_of(" \n\r\t<", actual_end_of_name);
+		if (actual_start_of_name == std::string::npos)
+		{
+			actual_start_of_name = 0;
+		}
+		else
+		{
+			actual_start_of_name += 1;
+		}
+		attribute_name = name_part.substr(actual_start_of_name, actual_end_of_name - actual_start_of_name + 1);
+	}
+	else
+	{
+		return;
+	}
+
+
 	/*for (size_t i = 0; i < attribute_name_end; i++)
 	{
 		attribute_name[i] = text_copy[i];
@@ -202,7 +243,7 @@ std::string XMLCommands::remove_tags_from_string(const std::string& line)
 	return result;
 }
 
-bool XMLCommands::check_for_tags(const std::string& line) const 
+bool XMLCommands::check_for_tags(const std::string& line) const
 {
 	if (line.find_first_of("<>") != std::string::npos)
 	{
@@ -211,7 +252,7 @@ bool XMLCommands::check_for_tags(const std::string& line) const
 	return false;
 }
 
-bool XMLCommands::check_for_attributes(const std::string& line) const 
+bool XMLCommands::check_for_attributes(const std::string& line) const
 {
 	if (check_for_tags(line))
 	{
@@ -223,19 +264,19 @@ bool XMLCommands::check_for_attributes(const std::string& line) const
 	return false;
 }
 
- std::string XMLCommands::get_next_line()
+std::string XMLCommands::get_next_line()
 {
 	//TODO fix this
 	return "new line";
 }
 
- //bool XMLCommands::check_for_multiple_tags(const std::string& line) const
- //{
-	// std::string new_line = line.substr(line.find('>'))
-	// return false;
- //}
+//bool XMLCommands::check_for_multiple_tags(const std::string& line) const
+//{
+   // std::string new_line = line.substr(line.find('>'))
+   // return false;
+//}
 
-bool XMLCommands::check_for_text_node(const std::string& line) const 
+bool XMLCommands::check_for_text_node(const std::string& line) const
 {
 	if (check_for_tags(line) == false && line.empty() != true)
 	{
@@ -246,7 +287,7 @@ bool XMLCommands::check_for_text_node(const std::string& line) const
 
 std::string XMLCommands::seperate_text_content(const std::string& line) const
 {
-		return line.substr(line.find('>') + 1, line.rfind('<') - line.find('>'));
+	return line.substr(line.find('>') + 1, line.rfind('<') - line.find('>'));
 }
 
 bool XMLCommands::check_for_lonely_end_tag(const std::string& line) const
@@ -261,10 +302,26 @@ bool XMLCommands::check_for_lonely_end_tag(const std::string& line) const
 
 void XMLCommands::fill_tags(const std::string& line, Tag& destination)
 {
+
+	std::string tag;
 	if (check_for_tags(line) == true)
 	{
-		std::string tag;
-		tag = line.substr(0, line.find_first_of(" >"));
+		//добваяме заради test24,05
+		int search_start = 1;
+		if (line.length() > 1 && line[1] == '/') search_start = 2;
+
+		size_t end_position = line.find_first_of(" \n\r\t>/", search_start);//добваяме заради test24,05 \t - tab, \r - някакъв ретърн когато сложим ентър.
+		if (end_position != std::string::npos)
+		{
+			tag = line.substr(0, end_position);
+		}
+		else
+		{
+			tag = line;
+		}
+
+
+		//tag = line.substr(0, line.find_first_of(" >")); - махаме специално заради test24.05.
 		if (tag.back() != '>')
 		{
 			tag += '>';

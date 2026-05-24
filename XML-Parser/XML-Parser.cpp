@@ -25,7 +25,15 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 
 	if (command.check_for_text_node(token))
 	{
-		return new XMLTextNode(token);
+		std::string clean_text = command.trim(token);
+		if (!clean_text.empty())
+		{
+			return new XMLTextNode(clean_text);
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	if (command.check_for_lonely_end_tag(token))
@@ -73,10 +81,10 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 	}
 	throw std::runtime_error("Unknown XML format: " + token);
 }
-
+#include <windows.h> //за кирилица на windows
 int main()
 {
-
+	SetConsoleOutputCP(CP_UTF8); //за кирилица на windows
 	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
 	if (!file.is_open())
 	{
@@ -122,20 +130,30 @@ int main()
 
 	//// Затваряме файла културно
 	//file.close();
-
-
-	XMLNode* root = parse(file);
-
-	if (root != nullptr)
+	try
 	{
-		// Принтиране в конзолата:
-		std::cout << "Ето го дървото:\n" << *root << "\n";
+		XMLNode* root = parse(file);
 
-		// Запазване във файл (Команда SAVE):
-		std::ofstream out_file("saved_garage.xml");
-		out_file << *root;
-		out_file.close();
+		if (root != nullptr)
+		{
+			// Принтиране в конзолата:
+			std::cout << "Ето го дървото:\n" << *root << "\n";
+
+			// Запазване във файл (Команда SAVE):
+			std::ofstream out_file("saved_garage.xml");
+			out_file << *root;
+			out_file.close();
+		}
+
 	}
+	catch (const std::exception& e)
+	{
+		std::cout << "\n=== Critical error ===\n";
+		std::cout << e.what() << "\n";
+		std::cout << "=======================\n";
+	}
+
+	
 
 	return 0;
 

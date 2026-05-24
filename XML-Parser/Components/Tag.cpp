@@ -15,7 +15,7 @@ Tag::Tag(const std::string& potenial_tag)
 	//проверяваме дали подадения таг не е затварящ.
 	if (potenial_tag.length() > 1 && potenial_tag[1] == '/')
 	{
-		closing_tag = potenial_tag; 
+		closing_tag = potenial_tag;
 
 		opening_tag = "<" + potenial_tag.substr(2);
 		std::cout << "Tags set successfully by closing tag! \n";
@@ -31,11 +31,11 @@ Tag::Tag(const std::string& potenial_tag)
 		}
 		else
 		{
-			std::cout << "Invalid tag!\n";
+				std::cout << "Invalid tag!\n";
 		}
 	}
 
-	
+
 }
 
 bool Tag::is_opening_tag_valid(const std::string& potenial_tag) const
@@ -53,7 +53,7 @@ Tag& Tag::set_tags(const std::string& possible_tag)
 	{
 		closing_tag = possible_tag;
 		opening_tag = "<" + possible_tag.substr(2);
-		// std::cout << "Tags set successfully by closing tag! \n";
+		 std::cout << "Tags set successfully by closing tag! \n";
 	}
 	else
 	{
@@ -66,10 +66,10 @@ Tag& Tag::set_tags(const std::string& possible_tag)
 		}
 		else
 		{
-			std::cout << "Invalid tag! \n";
+			std::cout << "Invalid tag : [" << possible_tag << "] \n";
 		}
 	}
-	
+
 
 	return *this;
 }

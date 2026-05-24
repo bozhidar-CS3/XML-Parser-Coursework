@@ -22,6 +22,9 @@ public:
 	unsigned get_number_of_tags(const std::string& line);
 
 
+	std::string trim(const std::string& raw_text);
+
+
 	std::string get_next_token(std::ifstream& file);
 	bool check_for_attribute(const std::string& opening_tag) const;
 	std::string seperate_attributes_from_tag(const std::string& opening_tag);

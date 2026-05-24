@@ -1,4 +1,19 @@
 <garage>
-    <vehicle brand="VW"></vehicle>
-    <vehicle brand="Toyota"></vehicle>
+    <vehicle brand="Mazda" model="RX-8" year="2005">
+        <owner>
+            Ivan
+        </owner>
+    </vehicle>
+    <vehicle id="100" brand="Nissan"></vehicle>
+    <self_closing_tag></self_closing_tag>
+    <history>
+        Този гараж е основан през
+        <year>
+            1995
+        </year>
+        и оттогава работи.
+    </history>
+    <math_rule description="5 >">
+        >
+    </math_rule>
 </garage>
