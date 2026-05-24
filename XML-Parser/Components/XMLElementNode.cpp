@@ -54,6 +54,41 @@ void XMLElementNode::generate_unique_ids(UniqueId& values)
 	}
 }
 
+void XMLElementNode::print(std::ostream& out, unsigned depth) const
+{
+	std::string opening = element_tag.get_opening_tag();
+	opening = opening.substr(0, opening.length() - 1);
+	out << std::string(depth * 4, ' ') << opening;
+	if (!unique_id.get_attribute_name().empty() && !unique_id.get_attribute_value().empty())
+	{
+		out << unique_id.get_attribute_name() << "=\"" << unique_id.get_attribute_value() <<"\"";
+	}
+	
+	if (!element_attributes.empty())
+	{
+		for (Attribute attribute : element_attributes)
+		{
+			out << ' ' << attribute.get_attribute_name() << "=\"" << attribute.get_attribute_value() << "\"";
+		}
+	}
+	out << '>';
+	
+	if (!element_children.empty())
+	{
+		out << "\n";
+		for (XMLNode* i : element_children)
+		{
+			i->print(out, depth + 1);
+		}
+		out << std::string(depth * 4, ' ') <<element_tag.get_closing_tag()<<"\n";
+	}
+	else
+	{
+		out << element_tag.get_closing_tag()<<"\n";
+	}
+	
+}
+
 void XMLElementNode::add_child(XMLNode* child)
 {
 	element_children.push_back(child);

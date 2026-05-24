@@ -10,6 +10,8 @@ class XMLTextNode :public XMLNode
 public:
 	XMLTextNode();
 	XMLTextNode(const std::string&);
+
+	void print(std::ostream& out, unsigned depth) const override;
 	const std::string get_type() const override;
 	void generate_unique_ids(UniqueId& values) override;
 	const  XMLTextContent& get_text_node() const;

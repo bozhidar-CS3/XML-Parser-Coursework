@@ -65,5 +65,8 @@
     <ClInclude Include="Commands\Unique.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Commands\PrintXMLNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

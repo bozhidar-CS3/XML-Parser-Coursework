@@ -30,6 +30,8 @@ public:
 
 	void generate_unique_ids(UniqueId& values) override;
 
+	void print(std::ostream& out, unsigned depth) const override;
+
 	void add_child(XMLNode* child);
 	const Attribute& get_unique_id() const ;
 	XMLElementNode& set_unique_id(const Attribute& );

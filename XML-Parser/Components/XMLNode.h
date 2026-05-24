@@ -9,6 +9,7 @@ class XMLNode
 public:
 	virtual ~XMLNode() = default;
 	virtual const std::string get_string() const = 0;
+	virtual void print(std::ostream& out, unsigned depth = 0) const = 0;
 	virtual const std::string get_type() const = 0;
 	virtual void generate_unique_ids(UniqueId& values) = 0;
 	//ново
@@ -18,6 +19,11 @@ public:
 	//virtual add_attributes()
 };
 
+inline std::ostream& operator<<(std::ostream& out, const XMLNode& node)
+{
+	node.print(out, 0);
+	return out;
+}
 
 // Как да опиша атрибутите какви да са те ? Как изобщо да започна ? Правилно ли почвам ?
 //Нека засега да направим голямата четворка за всеки случай.

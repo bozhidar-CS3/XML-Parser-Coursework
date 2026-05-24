@@ -12,6 +12,12 @@ XMLTextNode::XMLTextNode(const std::string& text_content):content(text_content)
 	
 }
 
+void  XMLTextNode::print(std::ostream& out, unsigned depth) const
+{
+	out << std::string(depth * 4, ' ') << content.get_content();
+
+}
+
 const std::string XMLTextNode::get_type() const
 {
 	return "TextNode";

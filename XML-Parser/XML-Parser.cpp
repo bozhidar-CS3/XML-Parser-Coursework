@@ -76,7 +76,7 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 
 int main()
 {
-	
+
 	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
 	if (!file.is_open())
 	{
@@ -84,44 +84,58 @@ int main()
 		return 1; // Спираме програмата
 	}
 
-	XMLNode* root = nullptr;
+	//XMLNode* root = nullptr;
 
-	// 2. Защитената зона (Опитваме да парснем)
-	try
+	//// 2. Защитената зона (Опитваме да парснем)
+	//try
+	//{
+	//	std::cout << "Start reading file \n";
+
+	//	// Викаме нашата рекурсивна функция (подаваме файла)
+	//	root = parse(file);
+
+	//	if (root != nullptr)
+	//	{
+	//		std::cout << "\n=== Succes! ===\n";
+	//		std::cout << "XML tree is build!\n";
+
+	//		// Ако имаш написана функция за принтиране (напр. root->print()), 
+	//		// тук е моментът да я извикаш, за да видиш резултата на екрана.
+	//	}
+	//	else
+	//	{
+	//		std::cout << "File is empty or has no root.\n";
+	//	}
+	//}
+	//// 3. Спасителният екип (Хващаме синтактични грешки)
+	//catch (const std::exception& e)
+	//{
+	//	std::cerr << "\n=== Error Parsing ===\n";
+	//	std::cerr << e.what() << "\n";
+	//	std::cerr << "Tree is broken.\n";
+	//}
+
+	//// 4. Почистване на паметта (МНОГО ВАЖНО!)
+	//// Дори програмата да е гръмнала по средата, ако root не е nullptr,
+	//// това извикване ще задейства деструкторите рекурсивно и ще изтрие всичко!
+	//delete root;
+
+	//// Затваряме файла културно
+	//file.close();
+
+
+	XMLNode* root = parse(file);
+
+	if (root != nullptr)
 	{
-		std::cout << "Start reading file \n";
+		// Принтиране в конзолата:
+		std::cout << "Ето го дървото:\n" << *root << "\n";
 
-		// Викаме нашата рекурсивна функция (подаваме файла)
-		root = parse(file);
-
-		if (root != nullptr)
-		{
-			std::cout << "\n=== Succes! ===\n";
-			std::cout << "XML tree is build!\n";
-
-			// Ако имаш написана функция за принтиране (напр. root->print()), 
-			// тук е моментът да я извикаш, за да видиш резултата на екрана.
-		}
-		else
-		{
-			std::cout << "File is empty or has no root.\n";
-		}
+		// Запазване във файл (Команда SAVE):
+		std::ofstream out_file("saved_garage.xml");
+		out_file << *root;
+		out_file.close();
 	}
-	// 3. Спасителният екип (Хващаме синтактични грешки)
-	catch (const std::exception& e)
-	{
-		std::cerr << "\n=== Error Parsing ===\n";
-		std::cerr << e.what() << "\n";
-		std::cerr << "Tree is broken.\n";
-	}
-
-	// 4. Почистване на паметта (МНОГО ВАЖНО!)
-	// Дори програмата да е гръмнала по средата, ако root не е nullptr,
-	// това извикване ще задейства деструкторите рекурсивно и ще изтрие всичко!
-	delete root;
-
-	// Затваряме файла културно
-	file.close();
 
 	return 0;
 
