@@ -81,16 +81,18 @@ XMLNode* parse(std::ifstream& file, const Tag& expected_tag = Tag())
 	}
 	throw std::runtime_error("Unknown XML format: " + token);
 }
+
+
 #include <windows.h> //за кирилица на windows
 int main()
 {
-	SetConsoleOutputCP(CP_UTF8); //за кирилица на windows
-	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
-	if (!file.is_open())
-	{
-		std::cerr << "Critical Error: file test.xml cannot be opened!\n";
-		return 1; // Спираме програмата
-	}
+	//SetConsoleOutputCP(CP_UTF8); //за кирилица на windows
+	//std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
+	//if (!file.is_open())
+	//{
+	//	std::cerr << "Critical Error: file test.xml cannot be opened!\n";
+	//	return 1; // Спираме програмата
+	//}
 
 	//XMLNode* root = nullptr;
 
@@ -130,30 +132,97 @@ int main()
 
 	//// Затваряме файла културно
 	//file.close();
-	try
-	{
-		XMLNode* root = parse(file);
+	// 
+	// 
 
-		if (root != nullptr)
+
+	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
+	if (!file.is_open())
+	{
+		std::cout << "Can't open the file!\n";
+		return 1;
+	}
+
+	// 2. Парсваме го (извикай твоята функция за парсване)
+	XMLNode* root = parse(file);
+	if (root == nullptr)
+	{
+		std::cout << "can't start!\n";
+		return 1;
+	}
+
+	std::cout << "====== tree is built ======\n\n";
+
+	// ==========================================
+	// ТЕСТОВЕ НА XPATH С ТВОЯ ФАЙЛ
+	// ==========================================
+
+	// --- ТЕСТ 1: Търсим всички коли ---
+	std::cout << "--- TEST 1: garage/vehicle ---\n";
+	std::vector<XMLNode*> vehicles = root->get_root_children_with_tag("garage/vehicle");
+
+	if (vehicles.empty()) {
+		std::cout << "NO cars!\n";
+	}
+	else {
+		std::cout << "found " << vehicles.size() << " cars:\n";
+		for (XMLNode* v : vehicles)
 		{
-			// Принтиране в конзолата:
-			std::cout << "Ето го дървото:\n" << *root << "\n";
-
-			// Запазване във файл (Команда SAVE):
-			std::ofstream out_file("saved_garage.xml");
-			out_file << *root;
-			out_file.close();
+			v->print(std::cout,0); // Принтираме ги
+			std::cout << "-------------------\n";
 		}
-
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << "\n=== Critical error ===\n";
-		std::cout << e.what() << "\n";
-		std::cout << "=======================\n";
 	}
 
-	
+	// --- ТЕСТ 2: Търсим собствениците на коли ---
+	std::cout << "\n--- TEST 2: garage/vehicle/owner ---\n";
+	std::vector<XMLNode*> owners = root->get_root_children_with_tag("garage/vehicle/owner");
+
+	if (owners.empty()) {
+		std::cout << "no owners!\n";
+	}
+	else {
+		std::cout << "found: " << owners.size() << " owners:\n";
+		for (XMLNode* o : owners)
+		{
+			o->print(std::cout, 0);
+			std::cout << "\n-------------------\n";
+		}
+	}
+
+	// --- ТЕСТ 3: Търсим историята и годината ---
+	std::cout << "\n--- TEST 3: garage/history/year ---\n";
+	std::vector<XMLNode*> years = root->get_root_children_with_tag("garage/history/year");
+
+	if (years.empty()) {
+		std::cout << "year not found!\n";
+	}
+	else {
+		std::cout << "found year:\n";
+		for (XMLNode* y : years)
+		{
+			y->print(std::cout, 0);
+			std::cout << "\n-------------------\n";
+		}
+	}
+
+	// --- ТЕСТ 4: Търсим самозатварящия се таг ---
+	std::cout << "\n--- TEST 4: garage/self_closing_tag ---\n";
+	std::vector<XMLNode*> self_closing = root->get_root_children_with_tag("garage/self_closing_tag");
+
+	if (self_closing.empty()) {
+		std::cout << "No tag!\n";
+	}
+	else {
+		std::cout << "Found tag:\n";
+		for (XMLNode* tag : self_closing)
+		{
+			tag->print(std::cout, 0);
+			std::cout << "\n-------------------\n";
+		}
+	}
+
+	// 3. Почистваме паметта (ако имаш деструктор/функция за триене)
+	 delete root; 
 
 	return 0;
 

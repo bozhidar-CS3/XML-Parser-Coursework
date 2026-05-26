@@ -16,6 +16,8 @@ class XMLElementNode : public XMLNode
 
 	std::vector<XMLNode*> element_children;
 
+
+
 	//временен стринг за тестове
 	std::string temp;
 public:
@@ -52,10 +54,20 @@ public:
 
 	XMLElementNode(const Attribute& id, const Tag& tag,const std::vector<Attribute>& attributes, std::vector<XMLNode*> children);
 
+
+
+	std::vector<XMLNode*> get_root_children_with_tag(const std::string& user_command) override;
+	
+	std::vector<Attribute> get_attributes() override;
+	void set_id(Attribute& id, const std::string& name) override;
+	Attribute get_id() override;
+	std::string get_text_content() override;
 	//new
 
 	//Рекурсия.
 	//void add_child(XMLNode* child) override;
 
 	//Трябва да си сменя името на базовия клас. Трябва да направя фактори.
+
+
 };

@@ -1,7 +1,7 @@
 ﻿#include "XMLElementNode.h"
 #include <string>
 #include "../Commands/ReadXMLFile.h"
-
+#include <exception>
 XMLElementNode::XMLElementNode()
 {
 
@@ -16,12 +16,12 @@ XMLElementNode::~XMLElementNode()
 	element_children.clear();
 }
 
-XMLElementNode::XMLElementNode( std::string& line)
+XMLElementNode::XMLElementNode(std::string& line)
 {
 	XMLCommands commands;
 	commands.fill_attributes(line, element_attributes);
 	commands.fill_tags(line, element_tag);
-	
+
 }
 
 
@@ -61,9 +61,9 @@ void XMLElementNode::print(std::ostream& out, unsigned depth) const
 	out << std::string(depth * 4, ' ') << opening;
 	if (!unique_id.get_attribute_name().empty() && !unique_id.get_attribute_value().empty())
 	{
-		out << unique_id.get_attribute_name() << "=\"" << unique_id.get_attribute_value() <<"\"";
+		out << unique_id.get_attribute_name() << "=\"" << unique_id.get_attribute_value() << "\"";
 	}
-	
+
 	if (!element_attributes.empty())
 	{
 		for (Attribute attribute : element_attributes)
@@ -72,7 +72,7 @@ void XMLElementNode::print(std::ostream& out, unsigned depth) const
 		}
 	}
 	out << '>';
-	
+
 	if (!element_children.empty())
 	{
 		out << "\n";
@@ -80,13 +80,13 @@ void XMLElementNode::print(std::ostream& out, unsigned depth) const
 		{
 			i->print(out, depth + 1);
 		}
-		out << std::string(depth * 4, ' ') <<element_tag.get_closing_tag()<<"\n";
+		out << std::string(depth * 4, ' ') << element_tag.get_closing_tag() << "\n";
 	}
 	else
 	{
-		out << element_tag.get_closing_tag()<<"\n";
+		out << element_tag.get_closing_tag() << "\n";
 	}
-	
+
 }
 
 void XMLElementNode::add_child(XMLNode* child)
@@ -139,7 +139,7 @@ size_t XMLElementNode::get_attributes_count() const
 
 void XMLElementNode::set_attributes(const std::vector<Attribute>& other)
 {
-	for (Attribute i:other)
+	for (Attribute i : other)
 	{
 		this->element_attributes.push_back(i);
 	}
@@ -150,7 +150,7 @@ XMLElementNode::XMLElementNode(const XMLElementNode& other)
 	this->unique_id = other.unique_id;
 	this->element_attributes = other.element_attributes;
 	this->element_tag = other.element_tag;
-	for (XMLNode* i:other.element_children)
+	for (XMLNode* i : other.element_children)
 	{
 		this->element_children.push_back(i->copy());
 	}
@@ -163,7 +163,7 @@ XMLNode* XMLElementNode::copy()
 
 const Attribute& XMLElementNode::get_attribute_at(unsigned position) const
 {
-	
+
 	return element_attributes.at(position);
 }
 
@@ -182,3 +182,73 @@ XMLElementNode::XMLElementNode(const Attribute& id, const Tag& tag, const std::v
 	element_tag = tag;
 	element_children = children;
 }
+
+std::vector<XMLNode*> XMLElementNode::get_root_children_with_tag(const std::string& user_command)
+{
+	if (user_command.empty())
+	{
+		return std::vector<XMLNode*>();
+	}
+	XMLCommands command;
+	std::string root_tag, remainig_path;
+	std::vector<XMLNode*> result_children;
+
+	command.seperate_tags_from_user_command(user_command, root_tag, remainig_path);
+	size_t opening_tag_lenght = element_tag.get_opening_tag().length();
+	//element_tag.print_tag();
+
+	//std::cout << root_tag << " " << remainig_path << "\n";
+	std::string element_tag_without_brackets = element_tag.get_opening_tag().substr(1, opening_tag_lenght - 2);
+	//std::cout << element_tag_without_brackets << "\n";
+	if (element_tag_without_brackets != root_tag)
+	{
+	//	std::cout << "NOW root\n";
+		return std::vector<XMLNode*>();
+
+	}
+
+	if (remainig_path.empty())
+	{
+	//	std::cout << "NOW no children\n ";
+		result_children.push_back(this);
+		return result_children;
+	}
+
+	//std::cout << "YEs children \n";
+	for (XMLNode* i : element_children)
+	{
+		std::vector<XMLNode*> tmp = i->get_root_children_with_tag(remainig_path);
+		for (XMLNode* j : tmp)
+		{
+	//		j->print(std::cout, 0);
+			result_children.push_back(j);
+		}
+	}
+	return result_children;
+}
+
+std::vector<Attribute> XMLElementNode::get_attributes()
+{
+	std::vector < Attribute> result;
+	for (Attribute i: element_attributes )
+	{
+		result.push_back(i);
+	}
+	return result;
+}
+
+void XMLElementNode::set_id(Attribute& id, const std::string& name)
+{
+	id.set_attribute_value(name);
+}
+
+Attribute XMLElementNode::get_id()
+{
+	return unique_id;
+}
+
+std::string XMLElementNode::get_text_content()
+{
+	return "";
+}
+

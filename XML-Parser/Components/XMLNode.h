@@ -10,11 +10,16 @@ public:
 	virtual ~XMLNode() = default;
 	virtual const std::string get_string() const = 0;
 	virtual void print(std::ostream& out, unsigned depth = 0) const = 0;
+
+	virtual std::vector<XMLNode*> get_root_children_with_tag(const std::string& user_command) = 0;
 	virtual const std::string get_type() const = 0;
 	virtual void generate_unique_ids(UniqueId& values) = 0;
 	//ново
 	virtual XMLNode* copy() = 0;
-
+	virtual std::vector<Attribute> get_attributes() = 0;
+	virtual Attribute get_id() = 0;
+	virtual void set_id(Attribute& id, const std::string& value) = 0;
+	virtual std::string get_text_content() = 0;
 	//virtual void add_element_node(XMLNode* child) = 0;
 	//virtual add_attributes()
 };

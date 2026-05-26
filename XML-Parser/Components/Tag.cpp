@@ -83,3 +83,9 @@ const std::string& Tag::get_closing_tag() const
 {
 	return closing_tag;
 }
+
+void Tag::print_tag() const
+{
+	std::cout << get_opening_tag() << " " << get_closing_tag();
+
+}

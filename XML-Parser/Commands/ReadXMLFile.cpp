@@ -87,6 +87,27 @@ std::string XMLCommands::trim(const std::string& raw_text)
 	}
 }
 
+void XMLCommands::seperate_tags_from_user_command(const std::string& user_command, std::string& root_tag, std::string& remainig_path)
+{
+	size_t position_of_operator = user_command.find('/');
+	if (position_of_operator == std::string::npos)
+	{
+		root_tag = user_command;
+		remainig_path = "";
+	}
+	else
+	{
+		root_tag = user_command.substr(0, position_of_operator);
+		remainig_path = user_command.substr(position_of_operator + 1);
+	}
+
+}
+
+std::vector<std::string> XMLCommands::get_children_with_child_tag(const std::string& user_command)
+{
+	return std::vector<std::string>();
+}
+
 std::string XMLCommands::get_next_token(std::ifstream& file)
 {
 	int cur_symbol = file.peek(); // prawim go инт за да може да хване -1 което eof връща.

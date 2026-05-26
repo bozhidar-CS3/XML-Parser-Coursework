@@ -24,6 +24,9 @@ public:
 
 	std::string trim(const std::string& raw_text);
 
+	//TODO функция, която да намира кое се изисква от нас.
+	void seperate_tags_from_user_command(const std::string& user_command, std::string& root_tag, std::string& remainig_path);
+	std::vector<std::string> get_children_with_child_tag(const std::string& user_command);
 
 	std::string get_next_token(std::ifstream& file);
 	bool check_for_attribute(const std::string& opening_tag) const;
