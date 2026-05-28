@@ -24,4 +24,8 @@ public:
 	Attribute get_id() override;
 	void set_id(Attribute& id, const std::string& value) override;
 	std::string get_text_content() override;
+
+	std::vector<XMLNode*> get_children() override;
+	std::string get_tag_name() override;
+
 };

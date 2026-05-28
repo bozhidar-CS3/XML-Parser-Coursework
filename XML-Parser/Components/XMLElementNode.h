@@ -62,6 +62,9 @@ public:
 	void set_id(Attribute& id, const std::string& name) override;
 	Attribute get_id() override;
 	std::string get_text_content() override;
+
+	std::vector<XMLNode*> get_children() override;
+	std::string get_tag_name();
 	//new
 
 	//Рекурсия.

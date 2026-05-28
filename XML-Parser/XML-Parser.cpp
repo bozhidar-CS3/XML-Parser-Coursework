@@ -11,6 +11,7 @@
 #include <vector>
 #include "Components/XMLElementNode.h"
 #include "Commands/ReadXMLFile.h"
+#include "Commands/XMLXpath.h"
 
 
 
@@ -137,92 +138,160 @@ int main()
 
 
 	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
+
+	//NEW
+	// 
+	
 	if (!file.is_open())
 	{
 		std::cout << "Can't open the file!\n";
 		return 1;
 	}
 
-	// 2. Парсваме го (извикай твоята функция за парсване)
 	XMLNode* root = parse(file);
 	if (root == nullptr)
 	{
-		std::cout << "can't start!\n";
+		std::cout << "Can't start (parsing failed)!\n";
 		return 1;
 	}
 
-	std::cout << "====== tree is built ======\n\n";
+	std::cout << "====== Tree is built ======\n\n";
+
+	// Създаваме обект от твоя клас (ако функциите не са static)
+	Xpath xpath_engine;
 
 	// ==========================================
-	// ТЕСТОВЕ НА XPATH С ТВОЯ ФАЙЛ
+	// ТЕСТ 1: Филтър по стойност -> person[address="Bulgaria"]
 	// ==========================================
+	std::cout << "--- TEST 1: person[address=\"Bulgaria\"] ---\n";
 
-	// --- ТЕСТ 1: Търсим всички коли ---
-	std::cout << "--- TEST 1: garage/vehicle ---\n";
-	std::vector<XMLNode*> vehicles = root->get_root_children_with_tag("garage/vehicle");
+	// Стъпка 1: Намираме всички хора
+	std::vector<XMLNode*> all_persons = root->get_root_children_with_tag("garage/person");
+	// Стъпка 2: Удряме филтъра! (Очакваме да върне само Иван и Георги)
+	std::vector<XMLNode*> bg_residents = xpath_engine.get_element_where_x_is_true(all_persons, "address", "Bulgaria");
 
-	if (vehicles.empty()) {
-		std::cout << "NO cars!\n";
+	if (bg_residents.empty()) {
+		std::cout << "No people found from Bulgaria!\n";
 	}
 	else {
-		std::cout << "found " << vehicles.size() << " cars:\n";
-		for (XMLNode* v : vehicles)
+		std::cout << "Found " << bg_residents.size() << " people from Bulgaria:\n";
+		for (XMLNode* p : bg_residents)
 		{
-			v->print(std::cout,0); // Принтираме ги
-			std::cout << "-------------------\n";
-		}
-	}
-
-	// --- ТЕСТ 2: Търсим собствениците на коли ---
-	std::cout << "\n--- TEST 2: garage/vehicle/owner ---\n";
-	std::vector<XMLNode*> owners = root->get_root_children_with_tag("garage/vehicle/owner");
-
-	if (owners.empty()) {
-		std::cout << "no owners!\n";
-	}
-	else {
-		std::cout << "found: " << owners.size() << " owners:\n";
-		for (XMLNode* o : owners)
-		{
-			o->print(std::cout, 0);
+			p->print(std::cout, 0);
 			std::cout << "\n-------------------\n";
 		}
 	}
 
-	// --- ТЕСТ 3: Търсим историята и годината ---
-	std::cout << "\n--- TEST 3: garage/history/year ---\n";
-	std::vector<XMLNode*> years = root->get_root_children_with_tag("garage/history/year");
 
-	if (years.empty()) {
-		std::cout << "year not found!\n";
+	// ==========================================
+	// ТЕСТ 2: Търсене на атрибути -> vehicle[@id]
+	// ==========================================
+	std::cout << "\n--- TEST 2: vehicle[@id] ---\n";
+
+	// Стъпка 1: Намираме всички коли
+	std::vector<XMLNode*> all_vehicles = root->get_root_children_with_tag("garage/vehicle");
+
+	// Стъпка 2: Вадим само атрибутите "id" (Нисанът трябва да бъде пропуснат!)
+	std::vector<Attribute> ids = xpath_engine.get_all_attributes_with_name("id", all_vehicles);
+
+	if (ids.empty()) {
+		std::cout << "No IDs found!\n";
 	}
 	else {
-		std::cout << "found year:\n";
-		for (XMLNode* y : years)
+		std::cout << "Found " << ids.size() << " IDs:\n";
+		for (const Attribute& attr : ids)
 		{
-			y->print(std::cout, 0);
-			std::cout << "\n-------------------\n";
+			std::cout << attr.get_attribute_name() << " = " << attr.get_attribute_value() << "\n";
 		}
 	}
 
-	// --- ТЕСТ 4: Търсим самозатварящия се таг ---
-	std::cout << "\n--- TEST 4: garage/self_closing_tag ---\n";
-	std::vector<XMLNode*> self_closing = root->get_root_children_with_tag("garage/self_closing_tag");
+	delete root;
+	//if (!file.is_open())
+	//{
+	//	std::cout << "Can't open the file!\n";
+	//	return 1;
+	//}
 
-	if (self_closing.empty()) {
-		std::cout << "No tag!\n";
-	}
-	else {
-		std::cout << "Found tag:\n";
-		for (XMLNode* tag : self_closing)
-		{
-			tag->print(std::cout, 0);
-			std::cout << "\n-------------------\n";
-		}
-	}
+	//// 2. Парсваме го (извикай твоята функция за парсване)
+	//XMLNode* root = parse(file);
+	//if (root == nullptr)
+	//{
+	//	std::cout << "can't start!\n";
+	//	return 1;
+	//}
 
-	// 3. Почистваме паметта (ако имаш деструктор/функция за триене)
-	 delete root; 
+	//std::cout << "====== tree is built ======\n\n";
+
+	//// ==========================================
+	//// ТЕСТОВЕ НА XPATH С ТВОЯ ФАЙЛ
+	//// ==========================================
+
+	//// --- ТЕСТ 1: Търсим всички коли ---
+	//std::cout << "--- TEST 1: garage/vehicle ---\n";
+	//std::vector<XMLNode*> vehicles = root->get_root_children_with_tag("garage/vehicle");
+
+	//if (vehicles.empty()) {
+	//	std::cout << "NO cars!\n";
+	//}
+	//else {
+	//	std::cout << "found " << vehicles.size() << " cars:\n";
+	//	for (XMLNode* v : vehicles)
+	//	{
+	//		v->print(std::cout,0); // Принтираме ги
+	//		std::cout << "-------------------\n";
+	//	}
+	//}
+
+	//// --- ТЕСТ 2: Търсим собствениците на коли ---
+	//std::cout << "\n--- TEST 2: garage/vehicle/owner ---\n";
+	//std::vector<XMLNode*> owners = root->get_root_children_with_tag("garage/vehicle/owner");
+
+	//if (owners.empty()) {
+	//	std::cout << "no owners!\n";
+	//}
+	//else {
+	//	std::cout << "found: " << owners.size() << " owners:\n";
+	//	for (XMLNode* o : owners)
+	//	{
+	//		o->print(std::cout, 0);
+	//		std::cout << "\n-------------------\n";
+	//	}
+	//}
+
+	//// --- ТЕСТ 3: Търсим историята и годината ---
+	//std::cout << "\n--- TEST 3: garage/history/year ---\n";
+	//std::vector<XMLNode*> years = root->get_root_children_with_tag("garage/history/year");
+
+	//if (years.empty()) {
+	//	std::cout << "year not found!\n";
+	//}
+	//else {
+	//	std::cout << "found year:\n";
+	//	for (XMLNode* y : years)
+	//	{
+	//		y->print(std::cout, 0);
+	//		std::cout << "\n-------------------\n";
+	//	}
+	//}
+
+	//// --- ТЕСТ 4: Търсим самозатварящия се таг ---
+	//std::cout << "\n--- TEST 4: garage/self_closing_tag ---\n";
+	//std::vector<XMLNode*> self_closing = root->get_root_children_with_tag("garage/self_closing_tag");
+
+	//if (self_closing.empty()) {
+	//	std::cout << "No tag!\n";
+	//}
+	//else {
+	//	std::cout << "Found tag:\n";
+	//	for (XMLNode* tag : self_closing)
+	//	{
+	//		tag->print(std::cout, 0);
+	//		std::cout << "\n-------------------\n";
+	//	}
+	//}
+
+	//// 3. Почистваме паметта (ако имаш деструктор/функция за триене)
+	// delete root; 
 
 	return 0;
 

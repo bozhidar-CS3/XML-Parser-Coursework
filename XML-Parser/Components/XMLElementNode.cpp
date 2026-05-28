@@ -249,6 +249,24 @@ Attribute XMLElementNode::get_id()
 
 std::string XMLElementNode::get_text_content()
 {
-	return "";
+	std::string res = "";
+	for (XMLNode*  i:element_children )
+	{
+		if (i->get_type() == "TextNode")
+		{
+			res += i->get_text_content();
+		}
+	}
+	return res;
 }
 
+std::vector<XMLNode*> XMLElementNode::get_children()
+{
+	return element_children;
+}
+
+std::string XMLElementNode::get_tag_name()
+{
+	size_t opening_tag_lenght = element_tag.get_opening_tag().length();
+	return element_tag.get_opening_tag().substr(1, opening_tag_lenght - 2);
+}

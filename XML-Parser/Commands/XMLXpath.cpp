@@ -18,7 +18,11 @@ std::vector<Attribute> Xpath::get_all_attributes_with_name(const std::string& na
 		Attribute atr;
 		for (XMLNode* i : elements)
 		{
-
+			Attribute atr = i->get_id();
+			if (atr.get_attribute_value() != "")
+			{
+				attributes.push_back(atr);
+			}
 			attributes.push_back(i->get_id());
 		}
 	}
@@ -43,19 +47,24 @@ std::vector<Attribute> Xpath::get_all_attributes_with_name(const std::string& na
 
 }
 
-std::vector<XMLNode*> Xpath::get_element_where_x_is_true(std::vector<XMLNode*> elements, const std::string& child_tag, std::string& value)
+std::vector<XMLNode*> Xpath::get_element_where_x_is_true(std::vector<XMLNode*> elements, const std::string& child_tag, const std::string& value)
 {
 	std::vector<XMLNode*> result;
-
 	for (XMLNode* i : elements)
 	{
-		std::vector<XMLNode*> children = i->get_root_children_with_tag(child_tag);
+	//	i->print(std::cout); std::cout << "\n";
+	//	std::cout << child_tag;
+		std::vector<XMLNode*> children = i->get_children();
 		for (XMLNode* j : children)
 		{
-			if (j->get_text_content() == value)
+			if (j->get_tag_name() == child_tag)
 			{
-				result.push_back(i);//добавяме родителя
-				break;
+				if (j->get_text_content() == value)
+				{
+					result.push_back(i);
+					break;
+				}
+				
 			}
 		}
 

@@ -1,4 +1,4 @@
-#include "XMLTextNode.h"
+﻿#include "XMLTextNode.h"
 #include <iostream>
 #include "XMLTextContent.h"
 
@@ -71,5 +71,15 @@ void XMLTextNode::set_id(Attribute& id, const std::string& value)
 
 std::string XMLTextNode::get_text_content()
 {
-	return content.get_content();
+	return this->content.get_content();
+}
+
+std::vector<XMLNode*> XMLTextNode::get_children()
+{
+	return std::vector<XMLNode*>(); // Текстът няма деца
+}
+
+std::string XMLTextNode::get_tag_name()
+{
+	return ""; // Текстът няма таг
 }
