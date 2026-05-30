@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Commands\ReadXMLFile.cpp" />
     <ClCompile Include="Commands\Unique.cpp" />
+    <ClCompile Include="Commands\UserInterface.cpp" />
     <ClCompile Include="Commands\XMLXpath.cpp" />
     <ClCompile Include="Components\Attribute.cpp" />
     <ClCompile Include="Components\Tag.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Commands\PrintXMLNode.h" />
     <ClInclude Include="Commands\ReadXMLFile.h" />
     <ClInclude Include="Commands\Unique.h" />
+    <ClInclude Include="Commands\UserInterface.h" />
     <ClInclude Include="Commands\XMLXpath.h" />
     <ClInclude Include="Components\Attribute.h" />
     <ClInclude Include="Components\Tag.h" />
