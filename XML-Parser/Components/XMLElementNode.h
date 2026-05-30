@@ -8,6 +8,7 @@
 
 class XMLElementNode : public XMLNode
 {
+
 	Attribute unique_id;
 
 	Tag element_tag;
@@ -65,6 +66,13 @@ public:
 
 	std::vector<XMLNode*> get_children() override;
 	std::string get_tag_name();
+
+	std::string get_unique_id_value() const override;
+
+	void set_attribute_value(const std::string& value, const std::string& key) override;
+	bool delete_attribute_by_key(const std::string& key)  override;
+
+	bool newchild(XMLNode* child) override;
 	//new
 
 	//Рекурсия.

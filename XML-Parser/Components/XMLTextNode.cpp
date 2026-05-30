@@ -83,3 +83,23 @@ std::string XMLTextNode::get_tag_name()
 {
 	return ""; // Текстът няма таг
 }
+
+std::string XMLTextNode::get_unique_id_value() const
+{
+	return unique_id.get_attribute_value();
+}
+
+void XMLTextNode::set_attribute_value(const std::string& value, const std::string& key)
+{
+	return;
+}
+
+bool XMLTextNode::delete_attribute_by_key(const std::string& key)
+{
+	return false;
+}
+
+bool XMLTextNode::newchild(XMLNode* child)
+{
+	return false;
+}

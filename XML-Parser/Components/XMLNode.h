@@ -25,11 +25,14 @@ public:
 	virtual void set_id(Attribute& id, const std::string& value) = 0;
 	virtual std::string get_text_content() = 0;
 
-
+	virtual std::string get_unique_id_value() const = 0;
 
 	virtual std::vector<XMLNode*> get_children() = 0;
 	virtual std::string get_tag_name() = 0;
+	virtual void set_attribute_value(const std::string& value, const std::string& key) = 0;
 
+	virtual bool delete_attribute_by_key(const std::string& key) = 0;
+	virtual bool newchild(XMLNode* child) = 0;
 	//virtual void add_element_node(XMLNode* child) = 0;
 	//virtual add_attributes()
 };

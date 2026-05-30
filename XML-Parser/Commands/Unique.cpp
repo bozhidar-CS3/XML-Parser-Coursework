@@ -63,8 +63,6 @@ void UniqueId::create_unique_ids(std::vector<Attribute>& atributes, Attribute& u
 			 unique_ids.push_back(atributes[pos].get_attribute_value());
 			 unique_id.set_attribute_value(atributes[pos].get_attribute_value());
 		 }
-			
-		 atributes.erase(atributes.begin() + pos);
 	}
 	else
 	{

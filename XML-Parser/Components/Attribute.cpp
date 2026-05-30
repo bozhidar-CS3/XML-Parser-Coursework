@@ -67,3 +67,12 @@ Attribute& Attribute::set_attribute_name(const std::string& possible_name)
 	}
 	return *this;
 }
+
+bool Attribute::is_empty()
+{
+	if (!attribute_name.empty() || attribute_value.empty())
+	{
+		return false;
+	}
+	return true;
+}

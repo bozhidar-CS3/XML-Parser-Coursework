@@ -16,6 +16,7 @@ public:
 	const std::string& get_attribute_value() const;
 	Attribute&  set_attribute_value(const std::string& );
 	Attribute& set_attribute_name(const std::string&);
+	bool is_empty();
 };
 //Задавам функционалностите, които мисля, че са ми необходими засега.
 

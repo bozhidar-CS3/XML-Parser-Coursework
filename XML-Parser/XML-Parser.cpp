@@ -136,76 +136,177 @@ int main()
 	// 
 	// 
 
-
 	std::ifstream file("C:\\Users\\dwd6\\Desktop\\Fmi-UpPraktikum\\XML-Parser\\XML-Parser\\x64\\Debug\\test.xml.txt");
 
-	//NEW
-	// 
-	
 	if (!file.is_open())
 	{
-		std::cout << "Can't open the file!\n";
+		std::cout << "DEBUG ERROR: File could not be opened!\n";
 		return 1;
 	}
 
 	XMLNode* root = parse(file);
+
 	if (root == nullptr)
 	{
-		std::cout << "Can't start (parsing failed)!\n";
+		std::cout << "DEBUG ERROR: Root is nullptr!\n";
 		return 1;
 	}
 
-	std::cout << "====== Tree is built ======\n\n";
-
-	// Създаваме обект от твоя клас (ако функциите не са static)
+	UniqueId global_id_generator;
 	Xpath xpath_engine;
 
-	// ==========================================
-	// ТЕСТ 1: Филтър по стойност -> person[address="Bulgaria"]
-	// ==========================================
-	std::cout << "--- TEST 1: person[address=\"Bulgaria\"] ---\n";
+	// Ако нямаш функция assign_unique_ids, закоментирай този ред
+	// xpath_engine.assign_unique_ids(root, global_id_generator);
 
-	// Стъпка 1: Намираме всички хора
-	std::vector<XMLNode*> all_persons = root->get_root_children_with_tag("garage/person");
-	// Стъпка 2: Удряме филтъра! (Очакваме да върне само Иван и Георги)
-	std::vector<XMLNode*> bg_residents = xpath_engine.get_element_where_x_is_true(all_persons, "address", "Bulgaria");
+	std::cout << "\n========== DEBUG START ==========\n";
 
-	if (bg_residents.empty()) {
-		std::cout << "No people found from Bulgaria!\n";
-	}
-	else {
-		std::cout << "Found " << bg_residents.size() << " people from Bulgaria:\n";
-		for (XMLNode* p : bg_residents)
+	// 1. Проверяваме децата на root
+	std::vector<XMLNode*> root_children = root->get_children();
+	std::cout << "STEP 1: Root has " << root_children.size() << " children.\n";
+
+	for (size_t i = 0; i < root_children.size(); ++i)
+	{
+		XMLNode* child = root_children[i];
+		std::cout << "  Child " << i << " | Type: [" << child->get_type() << "]";
+		if (child->get_type() == "ElementNode")
 		{
-			p->print(std::cout, 0);
-			std::cout << "\n-------------------\n";
+			std::cout << " | Tag: [" << child->get_tag_name() << "]\n";
+		}
+		else
+		{
+			std::cout << "\n";
 		}
 	}
 
+	std::cout << "\nSTEP 2: Testing root->get_root_children_with_tag(\"garage\")\n";
+	std::vector<XMLNode*> step1_garages = root->get_root_children_with_tag("garage");
+	std::cout << "  Found garages: " << step1_garages.size() << "\n";
 
-	// ==========================================
-	// ТЕСТ 2: Търсене на атрибути -> vehicle[@id]
-	// ==========================================
-	std::cout << "\n--- TEST 2: vehicle[@id] ---\n";
-
-	// Стъпка 1: Намираме всички коли
-	std::vector<XMLNode*> all_vehicles = root->get_root_children_with_tag("garage/vehicle");
-
-	// Стъпка 2: Вадим само атрибутите "id" (Нисанът трябва да бъде пропуснат!)
-	std::vector<Attribute> ids = xpath_engine.get_all_attributes_with_name("id", all_vehicles);
-
-	if (ids.empty()) {
-		std::cout << "No IDs found!\n";
-	}
-	else {
-		std::cout << "Found " << ids.size() << " IDs:\n";
-		for (const Attribute& attr : ids)
+	// Ако функцията ти не го намери, търсим го ръчно, за да не спре тестът!
+	if (step1_garages.empty())
+	{
+		std::cout << "  DEBUG: get_root_children_with_tag failed! Trying manual search...\n";
+		for (XMLNode* child : root_children)
 		{
-			std::cout << attr.get_attribute_name() << " = " << attr.get_attribute_value() << "\n";
+			if (child->get_type() == "ElementNode" && child->get_tag_name() == "garage")
+			{
+				step1_garages.push_back(child);
+				std::cout << "  DEBUG: Garage found manually!\n";
+			}
 		}
 	}
 
-	delete root;
+	std::cout << "\nSTEP 3: Searching for 'vehicle' inside found garages\n";
+	std::vector<XMLNode*> step2_vehicles;
+	for (XMLNode* garage : step1_garages)
+	{
+		std::vector<XMLNode*> garage_children = garage->get_children();
+		std::cout << "  Current garage has " << garage_children.size() << " children.\n";
+
+		for (XMLNode* child : garage_children)
+		{
+			if (child->get_type() == "ElementNode")
+			{
+				std::cout << "    Found element in garage: [" << child->get_tag_name() << "]\n";
+				if (child->get_tag_name() == "vehicle")
+				{
+					step2_vehicles.push_back(child);
+				}
+			}
+		}
+	}
+	std::cout << "  Total cars found: " << step2_vehicles.size() << "\n";
+
+
+	std::cout << "\nSTEP 4: Testing person filter\n";
+	std::vector<XMLNode*> all_persons;
+	for (XMLNode* garage : step1_garages)
+	{
+		for (XMLNode* child : garage->get_children())
+		{
+			if (child->get_type() == "ElementNode" && child->get_tag_name() == "person")
+			{
+				all_persons.push_back(child);
+			}
+		}
+	}
+	std::cout << "  Total persons found before filter: " << all_persons.size() << "\n";
+
+	// Забележка: В XML-а address е атрибут, затова тук тестваме детето-таг <name> с текст Ivan!
+	std::vector<XMLNode*> bg_persons = xpath_engine.get_element_where_x_is_true(all_persons, "name", "Ivan");
+	std::cout << "  Total persons named Ivan found: " << bg_persons.size() << "\n";
+
+	std::cout << "========== DEBUG END ==========\n";
+
+	return 0;
+
+	//NEW
+	// 
+	
+	//if (!file.is_open())
+	//{
+	//	std::cout << "Can't open the file!\n";
+	//	return 1;
+	//}
+
+	//XMLNode* root = parse(file);
+	//if (root == nullptr)
+	//{
+	//	std::cout << "Can't start (parsing failed)!\n";
+	//	return 1;
+	//}
+
+	//std::cout << "====== Tree is built ======\n\n";
+
+	//// Създаваме обект от твоя клас (ако функциите не са static)
+	//Xpath xpath_engine;
+
+	//// ==========================================
+	//// ТЕСТ 1: Филтър по стойност -> person[address="Bulgaria"]
+	//// ==========================================
+	//std::cout << "--- TEST 1: person[address=\"Bulgaria\"] ---\n";
+
+	//// Стъпка 1: Намираме всички хора
+	//std::vector<XMLNode*> all_persons = root->get_root_children_with_tag("garage/person");
+	//// Стъпка 2: Удряме филтъра! (Очакваме да върне само Иван и Георги)
+	//std::vector<XMLNode*> bg_residents = xpath_engine.get_element_where_x_is_true(all_persons, "address", "Bulgaria");
+
+	//if (bg_residents.empty()) {
+	//	std::cout << "No people found from Bulgaria!\n";
+	//}
+	//else {
+	//	std::cout << "Found " << bg_residents.size() << " people from Bulgaria:\n";
+	//	for (XMLNode* p : bg_residents)
+	//	{
+	//		p->print(std::cout, 0);
+	//		std::cout << "\n-------------------\n";
+	//	}
+	//}
+
+
+	//// ==========================================
+	//// ТЕСТ 2: Търсене на атрибути -> vehicle[@id]
+	//// ==========================================
+	//std::cout << "\n--- TEST 2: vehicle[@id] ---\n";
+
+	//// Стъпка 1: Намираме всички коли
+	//std::vector<XMLNode*> all_vehicles = root->get_root_children_with_tag("garage/vehicle");
+
+	//// Стъпка 2: Вадим само атрибутите "id" (Нисанът трябва да бъде пропуснат!)
+	//std::vector<Attribute> ids = xpath_engine.get_all_attributes_with_name("id", all_vehicles);
+
+	//if (ids.empty()) {
+	//	std::cout << "No IDs found!\n";
+	//}
+	//else {
+	//	std::cout << "Found " << ids.size() << " IDs:\n";
+	//	for (const Attribute& attr : ids)
+	//	{
+	//		std::cout << attr.get_attribute_name() << " = " << attr.get_attribute_value() << "\n";
+	//	}
+	//}
+
+	//delete root;
 	//if (!file.is_open())
 	//{
 	//	std::cout << "Can't open the file!\n";

@@ -6,7 +6,7 @@
 class XMLTextNode :public XMLNode
 {
 	XMLTextContent content;
-	
+	Attribute unique_id;
 public:
 	XMLTextNode();
 	XMLTextNode(const std::string&);
@@ -20,6 +20,8 @@ public:
 	XMLTextNode& set_text_node(const std::string& text_content);
 	XMLNode* copy() override;
 
+
+
 	std::vector<Attribute> get_attributes() override;
 	Attribute get_id() override;
 	void set_id(Attribute& id, const std::string& value) override;
@@ -28,4 +30,8 @@ public:
 	std::vector<XMLNode*> get_children() override;
 	std::string get_tag_name() override;
 
+	std::string get_unique_id_value() const override;
+	void set_attribute_value(const std::string& value, const std::string& key) override;
+	bool delete_attribute_by_key(const std::string& key) override;
+	bool newchild(XMLNode* child) override;
 };

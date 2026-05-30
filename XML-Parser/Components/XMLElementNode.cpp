@@ -185,52 +185,31 @@ XMLElementNode::XMLElementNode(const Attribute& id, const Tag& tag, const std::v
 
 std::vector<XMLNode*> XMLElementNode::get_root_children_with_tag(const std::string& user_command)
 {
+
+	std::vector<XMLNode*> children;
 	if (user_command.empty())
 	{
-		return std::vector<XMLNode*>();
+		return children;
 	}
-	XMLCommands command;
-	std::string root_tag, remainig_path;
-	std::vector<XMLNode*> result_children;
-
-	command.seperate_tags_from_user_command(user_command, root_tag, remainig_path);
-	size_t opening_tag_lenght = element_tag.get_opening_tag().length();
-	//element_tag.print_tag();
-
-	//std::cout << root_tag << " " << remainig_path << "\n";
-	std::string element_tag_without_brackets = element_tag.get_opening_tag().substr(1, opening_tag_lenght - 2);
-	//std::cout << element_tag_without_brackets << "\n";
-	if (element_tag_without_brackets != root_tag)
+	for (XMLNode* i:element_children )
 	{
-	//	std::cout << "NOW root\n";
-		return std::vector<XMLNode*>();
-
-	}
-
-	if (remainig_path.empty())
-	{
-	//	std::cout << "NOW no children\n ";
-		result_children.push_back(this);
-		return result_children;
-	}
-
-	//std::cout << "YEs children \n";
-	for (XMLNode* i : element_children)
-	{
-		std::vector<XMLNode*> tmp = i->get_root_children_with_tag(remainig_path);
-		for (XMLNode* j : tmp)
+		if (i->get_type() == "ElementNode")
 		{
-	//		j->print(std::cout, 0);
-			result_children.push_back(j);
+			std::string name = i->get_tag_name();
+			if (name == user_command)
+			{
+				children.push_back(i);
+			}
 		}
 	}
-	return result_children;
+	return children;
+	
 }
 
 std::vector<Attribute> XMLElementNode::get_attributes()
 {
 	std::vector < Attribute> result;
-	for (Attribute i: element_attributes )
+	for (Attribute i : element_attributes)
 	{
 		result.push_back(i);
 	}
@@ -250,7 +229,7 @@ Attribute XMLElementNode::get_id()
 std::string XMLElementNode::get_text_content()
 {
 	std::string res = "";
-	for (XMLNode*  i:element_children )
+	for (XMLNode* i : element_children)
 	{
 		if (i->get_type() == "TextNode")
 		{
@@ -269,4 +248,42 @@ std::string XMLElementNode::get_tag_name()
 {
 	size_t opening_tag_lenght = element_tag.get_opening_tag().length();
 	return element_tag.get_opening_tag().substr(1, opening_tag_lenght - 2);
+}
+
+std::string XMLElementNode::get_unique_id_value() const
+{
+	return unique_id.get_attribute_value();
+}
+
+void XMLElementNode::set_attribute_value(const std::string& value, const std::string& key)
+{
+	for (Attribute i : element_attributes)
+	{
+		if (i.get_attribute_name() == key)
+		{
+			i.set_attribute_value(value);
+			return;
+		}
+	}
+	element_attributes.push_back(Attribute(key, value));
+}
+
+bool XMLElementNode::delete_attribute_by_key(const std::string& key)
+{
+	for (size_t i = 0; i < element_attributes.size(); i++)
+	{
+		if (element_attributes[i].get_attribute_name() == key)
+		{
+			element_attributes.erase(element_attributes.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool XMLElementNode::newchild(XMLNode* child)
+{
+	add_child(child);
+	return true;
+
 }
